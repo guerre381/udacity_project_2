@@ -1,3 +1,4 @@
+# import libraries
 import sys
 import logging
 import re
@@ -5,11 +6,15 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 
-#set logging configuration
+
+
+# set logging configuration
 logging.basicConfig(encoding='utf-8',
                     format="%(asctime)s | %(levelname)-8s | %(name)s:%(funcName)s:%(lineno)s | %(message)s",
                     datefmt="%Y-%m-%d %H:%M:%S",
                     level=logging.INFO)
+
+
 
 
 def load_data(messages_filepath, categories_filepath):
@@ -35,6 +40,8 @@ def load_data(messages_filepath, categories_filepath):
     logging.info(f"category and message are merged: {merged_df.shape}")
 
     return merged_df
+
+
 
 
 def clean_data(df):
@@ -71,6 +78,9 @@ def clean_data(df):
     return df
 
 
+
+
+
 def save_data(df, database_filename):
     """Load clean transformed data into database
 
@@ -87,6 +97,9 @@ def save_data(df, database_filename):
     logging.info(f"data dumped in db file: {database_filename}")
 
 
+
+
+
 def main():
     """load dataframes form csv files and merge them into dataframe
 
@@ -94,7 +107,6 @@ def main():
     :param categories_filepath: path to csv file containing category data
     :return: merge dataframe
     """
-
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
@@ -118,6 +130,8 @@ def main():
               "to as the third argument. \n\nExample: python process_data.py "\
               "disaster_messages.csv disaster_categories.csv "\
               "DisasterResponse.db")
+
+
 
 
 
