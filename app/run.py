@@ -22,7 +22,7 @@ app = Flask(__name__)
 
 
 # load data
-engine = create_engine('sqlite:///../data/database.db')
+engine = create_engine('sqlite:///../data/DisasterResponse.db')
 df = pd.read_sql_table('data', engine)
 
 # load model

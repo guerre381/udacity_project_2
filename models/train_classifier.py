@@ -1,8 +1,10 @@
 # import libraries
 import sys
+import os
 import logging
 import pandas as pd
 import joblib
+import pathlib
 
 from sqlalchemy import create_engine
 
@@ -59,7 +61,6 @@ def load_data(database_filepath):
 
 
 
-
 def build_model(search = False):
     """build machine learning pipeline
 
@@ -79,12 +80,13 @@ def build_model(search = False):
     # set pipeline parameters
     pipeline.set_params(**{
                         'tfidf_emb__size':300,
-                        'tfidf_emb__iter':300,
-                        'tfidf_emb__min_count': 5,
+                        'tfidf_emb__iter':200,
+                        'tfidf_emb__min_count': 3,
 
-                        'clf__alpha':1e-03,
+                        'clf__alpha': 1e-03,
+                        'clf__max_iter':600,
                         'clf__learning_rate':'adaptive',
-                        'clf__hidden_layer_sizes':(300, 200, 100, 36,),
+                        'clf__hidden_layer_sizes':(300, 300, 300, 36,),
                         'clf__random_state':1,
                         'clf__early_stopping':True,
                         'clf__solver':'adam'
@@ -153,18 +155,21 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
     logging.info("run evaluate_model")
 
+    # find current foler path for savings
+    folder_path = os.path.dirname(__file__)
+
     # predict outputs on test data
     Y_pred = model.predict(X_test)
 
     # create classification report with precision, recall, and F1 score for each categories
     clf_report_df = pd.DataFrame(classification_report(Y_test, Y_pred,
                                         target_names=category_names, output_dict=True)).T
-    clf_report_df.to_markdown(buf='test/classification_report.md', mode='wt')
+    clf_report_df.to_markdown(buf=os.path.join(folder_path,'test','classification_report.md'), mode='w')
 
     # calculate confusion matrix for each categories and save corresponding heatmap plots
     conf_matrix_df = multilabel_confusion_matrix(Y_test, Y_pred)
     plot_confusion_matrix(conf_matrix_df, category_names,
-                          'test/confusion_matrix.png')
+                          os.path.join(folder_path,'test','confusion_matrix.png'))
 
 
 
@@ -216,5 +221,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # train_classifier_2.py ../data/database.db model.pkl
+    # python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl
     main()

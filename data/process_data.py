@@ -136,5 +136,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # process_data.py disaster_messages.csv disaster_categories.csv database.db
+    # python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db
     main()

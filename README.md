@@ -63,7 +63,8 @@ NLP model classfier:
 * Inputs:   raw test messages (string)
 * outputs:  36 overlapping categories (binary 1/0)
 
-The pipeline is a sequence of 3 steps:
+The pipeline is a cd ..
+:
 1. Transform: tokenization and lemmatisation 
 2. Transform: weighted mean word embedding with corresponding tfidf coefficient
 3. Classify: Dense neural network with 36 neuron output
@@ -71,7 +72,8 @@ The pipeline is a sequence of 3 steps:
 [Test results](models/test)
 
 The model can be improved with a different classifier like ensemble techniques.
-Neural network was prefered because of fast learning.
+Neural network was prefered because of fast learning. However, there are too many false negative.
+Recall is low.
 
 <!-- Built with -->
 ## Built With
