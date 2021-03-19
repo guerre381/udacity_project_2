@@ -48,9 +48,11 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Web application filtering out messages sent after a natural disaster happens. 
+Web application filtering out messages sent after a natural disaster occurred. 
 Such application can help appropriate disaster relief agencies to categorize and therefore prioritize
-the all events. Machine learning is the key. The web application relies on an NLP model in the background.
+ all events. 
+ 
+ Machine learning is the key. The web application relies on an NLP model in the background.
 It classifies input messages into several categories labeled with relevant keywords. 
 
 This project starts with data wrangling. It continues with building, training and testing of the model until 
@@ -60,11 +62,10 @@ deployment online.
 ## ML-Pipeline
 
 NLP model classfier:
-* Inputs:   raw test messages (string)
+* Inputs:   raw text messages (string)
 * outputs:  36 overlapping categories (binary 1/0)
 
-The pipeline is a cd ..
-:
+The pipeline is a 3 steps sequence:
 1. Transform: tokenization and lemmatisation 
 2. Transform: weighted mean word embedding with corresponding tfidf coefficient
 3. Classify: Dense neural network with 36 neuron output
@@ -118,9 +119,9 @@ the python scripts they respectively encapsulate.
     ├── logo.png                            # read me logo
     └── README.md                           # current file
     
-The data folder takes care of the ETL pipeline. 
-The models folder takes care of the ML pipeline. 
-The app folder takes car of web app management and rendering. 
+* The data folder contains the ETL pipeline. 
+* The models contains the ML pipeline. 
+* The app folder encapsulates web app management and rendering. 
 
 <!-- GETTING STARTED -->
 ## Getting Started
