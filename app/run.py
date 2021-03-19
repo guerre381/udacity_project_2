@@ -27,7 +27,7 @@ df = pd.read_sql_table('data', engine)
 
 # load model
 model = joblib.load("../models/model.pkl")
-
+print(model.get_params())
 
 
 @app.route('/')
