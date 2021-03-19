@@ -79,10 +79,10 @@ def build_model(search = False):
     # set pipeline parameters
     pipeline.set_params(**{
                         'tfidf_emb__size':300,
-                        'tfidf_emb__iter':100,
+                        'tfidf_emb__iter':300,
                         'tfidf_emb__min_count': 5,
 
-                        'clf__alpha':1e-04,
+                        'clf__alpha':1e-03,
                         'clf__learning_rate':'adaptive',
                         'clf__hidden_layer_sizes':(300, 200, 100, 36,),
                         'clf__random_state':1,
@@ -109,11 +109,12 @@ def build_model(search = False):
 
 
 
-def plot_confusion_matrix(conf_matrix_list, labels):
+def plot_confusion_matrix(conf_matrix_list, labels, cm_file_path):
     """Plot confusion matrix for each categories
 
     :param conf_matrix_list: confusion matrices' list of all categories
     :param labels: label names' list of all categorires
+    :param cm_file_path: path to file where to save confusion matrix
     """
 
     logging.info("run plot_confusion_matrix")
@@ -136,7 +137,7 @@ def plot_confusion_matrix(conf_matrix_list, labels):
 
     # save plots in file
     fig.tight_layout()
-    fig.savefig('ConfusionHeatMap.png')
+    fig.savefig(cm_file_path)
 
 
 
@@ -156,22 +157,23 @@ def evaluate_model(model, X_test, Y_test, category_names):
     Y_pred = model.predict(X_test)
 
     # create classification report with precision, recall, and F1 score for each categories
-    clf_report_df = pd.DataFrame(classification_report(Y_test, Y_pred, output_dict=True)).T
-    print(clf_report_df)
+    clf_report_df = pd.DataFrame(classification_report(Y_test, Y_pred,
+                                        target_names=category_names, output_dict=True)).T
+    clf_report_df.to_markdown(buf='test/classification_report.md', mode='wt')
 
     # calculate confusion matrix for each categories and save corresponding heatmap plots
     conf_matrix_df = multilabel_confusion_matrix(Y_test, Y_pred)
-    plot_confusion_matrix(conf_matrix_df, category_names)
+    plot_confusion_matrix(conf_matrix_df, category_names,
+                          'test/confusion_matrix.png')
 
 
 
 
 def save_model(model, model_filepath):
-    """Extract data form csv files and merge them into dataframe
+    """Save model after learning
 
-    :param messages_filepath: path to csv file containing message data
-    :param categories_filepath: path to csv file containing category data
-    :return: merge dataframe
+    :param model: machine learning model
+    :param model_filepath: file path where to save model
     """
 
     logging.info("run save_model")
@@ -187,7 +189,7 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         logging.info("Loading data...\n    DATABASE: {}".format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=0)
         
         logging.info("'Building model...")
         model = build_model()
