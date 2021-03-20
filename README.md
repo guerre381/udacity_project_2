@@ -68,13 +68,9 @@ NLP model classfier:
 The pipeline is a 3 steps sequence:
 1. Transform: tokenization and lemmatisation 
 2. Transform: weighted mean word embedding with corresponding tfidf coefficient
-3. Classify: Dense neural network with 36 neuron output
+3. Classify: Gradient boosting decision tree
 
 [Test results](models/test)
-
-The model can be improved with a different classifier like ensemble techniques.
-Neural network was prefered because of fast learning. However, there are too many false negative.
-Recall is low.
 
 <!-- Built with -->
 ## Built With

@@ -14,7 +14,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from sklearn.metrics import multilabel_confusion_matrix
 from sklearn.model_selection import GridSearchCV
-from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.multioutput import MultiOutputClassifier
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -74,7 +75,7 @@ def build_model(search = False):
     pipeline = Pipeline([
         ('tokenize', TokenizeTransform()), # split text into lemmatized words
         ('tfidf_emb', TfidfEmbeddingVectorizer()),
-        ('clf', MLPClassifier())
+        ('clf', MultiOutputClassifier(GradientBoostingClassifier()))
     ], verbose=True)
 
     # set pipeline parameters
@@ -83,13 +84,11 @@ def build_model(search = False):
                         'tfidf_emb__iter':200,
                         'tfidf_emb__min_count': 3,
 
-                        'clf__alpha': 1e-03,
-                        'clf__max_iter':600,
-                        'clf__learning_rate':'adaptive',
-                        'clf__hidden_layer_sizes':(300, 300, 300, 36,),
-                        'clf__random_state':1,
-                        'clf__early_stopping':True,
-                        'clf__solver':'adam'
+                        'clf__estimator__max_depth': 10,
+                        'clf__estimator__n_estimators':50,
+                        'clf__estimator__min_samples_split':4,
+                        'clf__estimator__random_state':0,
+                        'clf__estimator__random_state': 0,
                          })
 
     if search == True:
@@ -98,10 +97,9 @@ def build_model(search = False):
             'tfidf_emb__iter': (100, 200),
             'tfidf_emb__min_count': (3, 5),
 
-            'clf__alpha': (1e-03, 1e-04),
-            'clf__hidden_layer_sizes':[(300, 200, 100, 36,), (300, 100, 36,)],
-            'clf__early_stopping': (True, False),
-            'clf__solver': ('adam','sgd')
+            'clf__estimator__max_depth': (10,13),
+            'clf__estimator__n_estimators': (20, 30),
+            'clf__estimator__min_samples_split': (2,4),
         }
 
         pipeline = GridSearchCV(pipeline, parameters)
