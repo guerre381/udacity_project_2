@@ -66,6 +66,9 @@ def clean_data(df):
     # convert all values to numeric type
     categories_df = categories_df.apply(pd.to_numeric)
 
+    #binarize data
+    categories_df = (categories_df == 1).astype(int)
+
     # remove former category column and concat new clean caregories data to df
     df = df.drop("categories", axis=1)
     df = pd.concat([df, categories_df], axis=1)

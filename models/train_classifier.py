@@ -50,8 +50,7 @@ def load_data(database_filepath):
     df = pd.read_sql_table('data', engine)
     logging.info(f"data retrieved from db file: {database_filepath}")
 
-    #  the few inputs equal to 2 are removed and data are shuffled
-    df.loc[df['related']==2, 'related'] = 0
+    #  shuffle data
     df = df.sample(frac=1, random_state=42)
 
     # split data between input and outputs
